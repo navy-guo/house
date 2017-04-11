@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="admin/layouts/header :: header(title='管理首页')"></head>
+<body>
+
+    <div id="wrapper">
+
+        <div th:replace="admin/layouts/left :: left">...</div>
+
+        <div id="page-wrapper" class="gray-bg dashbard-1">
+
+            <div th:replace="admin/layouts/top :: top">...</div>
+
+            <div style="text-align: center;"><br/><br/><br/><br/><br/><br/><br/><h1>欢迎使用房屋租赁后台管理系统</h1></div>
+
+            <div th:replace="admin/layouts/footer :: footer">...</div>
+
+        </div>
+    </div>
+
+</body>
+</html>

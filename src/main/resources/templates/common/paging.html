@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<header th:fragment="paging">
+    <link  href="/plugins/laypage/skin/laypage.css" type="text/css" rel="stylesheet"/>
+    <script src='/plugins/laypage/laypage.js' type='text/javascript' charset='utf-8'></script>
+    <style>
+        .cnw_paging{padding: 15px;text-align: center;}
+        .cnw_paging a{background: #c6c6c6;color: #fff;}
+    </style>
+    <div id="paging_div" class="cnw_paging"></div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        laypage({
+            cont: 'paging_div', //容器。值支持id名、原生dom对象，jquery对象,
+            pages: [[${pageInfo.pages}]], //总页数
+            skin: '#5FB878', //皮肤
+            first: [[${pageInfo.firstPage}]], //将首页显示为数字1,。若不显示，设置false即可
+            last: [[${pageInfo.lastPage}]], //将尾页显示为总页数。若不显示，设置false即可
+            prev: '上一页', //若不显示，设置false即可
+            next: '下一页', //若不显示，设置false即可
+            curr: [[${pageInfo.pageNum}]],
+            jump: function(obj,first){//点击页码触发的事件
+                if(first!=true) {//是否首次进入页面
+                    var currentPage = obj.curr;//获取点击的页码
+                    var url = window.location.href;
+                        var href = window.location.href;
+                        if (url.indexOf("?") === -1 && url.indexOf("page=") === -1) {
+                            window.location.href = href+"?page="+currentPage;
+                        } else if (url.indexOf("?") > 0 && url.indexOf("page=") === -1) {
+                            window.location.href = href+"&page="+currentPage;
+                        } else if (url.indexOf("?page=") > 0) {
+                            window.location.href = href.substr(0,href.indexOf("?page=")) + "?page=" + currentPage;
+                        } else if (url.indexOf("?") > 0 && url.indexOf("page=") > 0) {
+                            window.location.href = href.substr(0,href.indexOf("&page=")) + "&page=" + currentPage;
+                        }
+                }
+            }
+        });
+        /*]]>*/
+    </script>
+</header>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:include="admin/layouts/header :: header(title='房屋租赁后台管理系统')"></head>
+
+<link th:href="@{/admin/css/plugins/summernote/summernote.css}" rel="stylesheet"/>
+<link th:href="@{/admin/css/plugins/summernote/summernote-bs3.css}"  rel="stylesheet"/>
+
+<body>
+
+    <div id="wrapper">
+        <div th:replace="admin/layouts/left :: left">...</div>
+
+        <div id="page-wrapper" class="gray-bg">
+
+            <div th:replace="admin/layouts/top :: top">...</div>
+
+            <!--<div class="row wrapper border-bottom white-bg page-heading">-->
+                <!--<div class="col-lg-10">-->
+                    <!--<h2>静态表</h2>-->
+                    <!--<ol class="breadcrumb">-->
+                        <!--<li>-->
+                            <!--<a href="index.html">首页</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a>表格</a>-->
+                        <!--</li>-->
+                        <!--<li class="active">-->
+                            <!--<strong>静态表</strong>-->
+                        <!--</li>-->
+                    <!--</ol>-->
+                <!--</div>-->
+                <!--<div class="col-lg-2">-->
+
+                <!--</div>-->
+            <!--</div>-->
+            <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="row">
+                    <div class="col-lg-6" style="width: 100%">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>基金会介绍</h5>
+                                <!--<div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                        <i class="fa fa-wrench"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-user">
+                                        <li><a href="#">配置选项 1</a>
+                                        </li>
+                                        <li><a href="#">配置选项 2</a>
+                                        </li>
+                                    </ul>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>-->
+                            </div>
+                            <div class="ibox-content">
+
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>标题</th>
+                                        <!--<th>内容</th>-->
+                                        <th>创建者</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="about : ${abouts}">
+                                        <td th:text="${aboutStat.index+1}"></td>
+                                        <td th:text="${about.title}"></td>
+                                        <!--<td th:utext="${about.content}"></td>-->
+                                        <td th:text="${about.author}"></td>
+                                        <td>
+                                            <a th:href="@{/about/admin/edit(view='introduce_edit',id=${about.id})}">编辑</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            </div>
+
+            <div th:replace="admin/layouts/footer :: footer">...</div>
+
+        </div>
+    </div>
+
+     <!--iCheck -->
+    <!--<script src="admin/js/plugins/iCheck/icheck.min.js"></script>-->
+
+    <script>
+        /*$(document).ready(function(){
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });*/
+    </script>
+    <script type="text/javascript">
+        $("#system").toggleClass("active");
+        $("#system1").toggleClass("active");
+    </script>
+
+</body>
+
+</html>

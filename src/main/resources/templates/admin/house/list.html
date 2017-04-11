@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin/layouts/header :: header(title='房屋租赁后台管理系统')"></head>
+<link th:href="@{/admin/css/plugins/summernote/summernote.css}" rel="stylesheet"/>
+<link th:href="@{/admin/css/plugins/summernote/summernote-bs3.css}"  rel="stylesheet"/>
+<body>
+
+    <div id="wrapper">
+        <div th:replace="admin/layouts/left :: left">...</div>
+
+        <div id="page-wrapper" class="gray-bg">
+
+            <div th:replace="admin/layouts/top :: top">...</div>
+
+            <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="row">
+                    <div class="col-lg-6" style="width: 100%">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>房屋管理</h5>
+                                <div class="ibox-tools">
+                                    <a type="button" class="btn btn-primary" th:href="@{/house/admin/edit}">添加</a>
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>小区</th>
+                                        <th>户型</th>
+                                        <!--<th>朝向</th>-->
+                                        <!--<th>楼层</th>-->
+                                        <!--<th>楼型</th>-->
+                                        <!--<th>面积</th>-->
+                                        <!--<th>装修情况</th>-->
+                                        <!--<th>一梯几户</th>-->
+                                        <!--<th>建造年代</th>-->
+                                        <th>租赁价格</th>
+                                        <th>房东姓名</th>
+                                        <th>房东手机号</th>
+                                        <th>跟进日期</th>
+                                        <th>跟进人姓名</th>
+                                        <th>跟进内容</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="house : ${pageInfo.list}">
+                                        <td th:text="${houseStat.index+1}"></td>
+                                        <td th:text="${#arrays.length(#strings.setSplit(house.address,'-')) gt 3 ? #strings.setSplit(house.address,'-')[2] : house.address}"></td>
+                                        <td th:text="${house.houseType}"></td>
+                                        <!--<td th:text="${house.orientation}"></td>-->
+                                        <!--<td th:text="${house.floor}"></td>-->
+                                        <!--<td th:text="${house.floorType}"></td>-->
+                                        <!--<td th:text="${house.acreage}"></td>-->
+                                        <!--<td th:text="${house.fitment}"></td>-->
+                                        <!--<td th:text="${house.family}"></td>-->
+                                        <!--<td th:utext="${#dates.format(house.time,'yyyy-MM-dd')}"></td>-->
+                                        <td th:text="${(null != house.price and null != house.priceUnits) ? house.price + house.priceUnits:''}"></td>
+                                        <td th:text="${house.landlord}"></td>
+                                        <td th:text="${house.moble}"></td>
+                                        <td th:text="${#dates.format(house.followDate,'yyyy-MM-dd HH:mm:ss')}"></td>
+                                        <td th:text="${house.userName}"></td>
+                                        <td th:text="${house.remark}"></td>
+                                        <td>
+                                            <a class="btn btn-info btn-sm" type="button" th:id="${house.id}" onclick="setFollow(this)"><i class="fa fa-edit"></i> 跟进</a>
+                                            <a class="btn btn-info btn-sm" type="button" th:href="@{/house/admin/edit(id=${house.id})}"><i class="fa fa-edit"></i> 查看/编辑</a>
+                                            <a class="btn btn-warning btn-sm" type="button" th:id="${house.id}" onclick="del(this)"><i class="fa fa-remove"></i> 删除</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:replace="common/paging :: paging">...</div>
+            </div>
+            <div th:replace="admin/layouts/footer :: footer">...</div>
+        </div>
+    </div>
+
+    <script>
+        function setFollow(obj){
+            $("#houseId").val($(obj).attr("id"));
+            $("#remark").val("");
+            layer.open({
+                title: '跟进',
+                type: 1,
+                skin: 'layui-layer-rim', //加上边框
+                area: ['320px', '170px'], //宽高
+                offset: '30%',
+                content: $("#setFollow")
+            });
+        }
+        function saveFollow() {
+            if ($("#remark").val() === "") {
+                layer.msg("请输入跟进内容!");
+                return;
+            }
+            $.ajax({
+                type: 'post',
+                data: $("#form").serialize(),
+                url: '/house/admin/editFollow',
+                success: function (data) {
+                    var json = data;
+                    if (json.status == 1) {
+                        layer.msg('保存成功', {
+                            icon: 1,
+                            offset: '35%',
+                            time: 1000 //2秒关闭（如果不配置，默认是3秒）
+                        },function() {
+                            layer.closeAll();
+                            window.location.href = "";
+                        });
+                    } else {
+                        alert(json.message);
+                    }
+                },
+                error: function () {
+                    alert('设置失败,请联系管理员!');
+                }
+            });
+        }
+        // 审核
+        function updateStatus(obj,status) {
+            var id = $(obj).attr("id");
+            layer.confirm('确定吗？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                $.ajax({
+                    type: "POST",
+                    data: {id: id,status:status},
+                    dataType: "json",
+                    url: "/house/admin/editStatus",
+                    success: function (data) {
+                        if (data.message === "SUCCESS") {
+                            layer.msg('成功', {
+                                time: 1000
+                            },function () {
+                                window.location.href = "";
+                            });
+                        } else {
+                            layer.msg("系统异常");
+                        }
+                    },
+                    error: function () {
+                        layer.alert("系统异常，请稍后再试!");
+                    }
+                });
+            });
+        }
+        // 删除
+        function del(obj) {
+            var id = $(obj).attr("id");
+            layer.confirm('确定要删除吗？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                $.ajax({
+                    type: "POST",
+                    data: {id: id},
+                    dataType: "json",
+                    url: "/house/admin/del",
+                    success: function (data) {
+                        if (data.message === "SUCCESS") {
+                            layer.msg('删除成功', {
+                                time: 1000
+                            },function () {
+                                window.location.href = "";
+                            });
+                        } else {
+                            layer.msg("系统异常");
+                        }
+                    },
+                    error: function () {
+                        layer.alert("系统异常，请稍后再试!");
+                    }
+                });
+            });
+        }
+    </script>
+
+    <script type="text/javascript">
+        $("#house").toggleClass("active");
+    </script>
+</body>
+</html>
+<div id="setFollow" style="display: none;">
+    <form role="form"  id="form" style="text-align: center;">
+        <div class="form-group">
+            <textarea class="form-control" placeholder="跟进内容..." id="remark" name="remark"></textarea>
+        </div>
+        <div class="text-right1">
+            <input type="hidden" name="id" id="houseId"/>
+            <button type="button" class="btn btn-sm btn-primary m-t-n-xs" onclick="saveFollow()"><strong>保存</strong></button>
+        </div>
+    </form>
+</div>

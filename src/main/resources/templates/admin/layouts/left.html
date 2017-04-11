@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<header class="navbar-default navbar-static-side" role="navigation" th:fragment="left">
+
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                    <span>
+                        <img src="/admin/images/logo1.png" width="50" height="50"/>
+                        <span class="text-muted text-xs m-l" th:text="${session.user.name}"></span>
+                    </span>
+
+                </div>
+                <div class="logo-element">
+                    基金
+                </div>
+            </li>
+            <li id="user">
+                <a th:href="@{/user/admin/list}"><i class="fa fa-sitemap"></i> <span class="nav-label">用户管理</span></a>
+            </li>
+            <li id="house">
+                <a th:href="@{/house/admin/list}"><i class="fa fa-volume-up"></i> <span class="nav-label">房屋管理</span></a>
+            </li>
+            <!--<li id="information">
+                <a th:href="@{/info/admin/list}"><i class="fa fa-th"></i> <span class="nav-label">资讯中心</span></a>
+            </li>
+            <li id="careerpic">
+                <a th:href="@{/career/admin/careerpic_list}"><i class="fa fa-book"></i> <span class="nav-label">我们的事业简介</span></a>
+            </li>
+            <li id="career">
+                <a th:href="@{/career/admin/list}"><i class="fa fa-globe"></i> <span class="nav-label">我们的事业</span></a>
+            </li>
+            <li id="infodisclosure">
+                <a th:href="@{/infodisclosure/admin/list}"><i class="fa fa-pie-chart"></i> <span class="nav-label">信息公开</span></a>
+            </li>
+            <li id="partner">
+                <a th:href="@{/partner/admin/list}"><i class="fa fa-users"></i> <span class="nav-label">我们的伙伴</span></a>
+            </li>
+            <li id="contact">
+                <a th:href="@{/contact/admin/list}"><i class="fa fa-comments"></i> <span class="nav-label">联系我们</span></a>
+            </li>
+            <li id="mascot">
+                <a th:href="@{/mascot/admin/list}"><i class="fa fa-trophy"></i> <span class="nav-label">吉祥物作品</span></a>
+            </li>
+            <li id="system">
+                <a href="#"><i class="fa fa-cogs"></i> <span class="nav-label">系统管理</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li id="system1"><a th:href="@{/dict/admin/list}">词典配置</a></li>
+                    <li id="system2"><a th:href="@{/systemAd/admin/list}">广告位管理</a></li>
+                </ul>
+            </li>-->
+        </ul>
+    </div>
+</header>
+</body>
+</html>
+

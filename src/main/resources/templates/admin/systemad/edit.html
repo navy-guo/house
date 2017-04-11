@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:include="admin/layouts/header :: header(title='房屋租赁后台管理系统')"></head>
+<body>
+
+<div id="wrapper">
+    <div th:replace="admin/layouts/left :: left">...</div>
+
+    <div id="page-wrapper" class="gray-bg">
+
+        <div th:replace="admin/layouts/top :: top">...</div>
+
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>广告位</h2>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="/index">首页</a>
+                    </li>
+                    <li class="active">
+                        <strong>编辑</strong>
+                    </li>
+                </ol>
+            </div>
+            <div class="col-lg-2">
+
+            </div>
+        </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-6" style="width: 100%">
+                    <form role="form" class="form-horizontal" id="form" th:action="@{/systemAd/admin/edit}" method="post" th:object="${systemAd}">
+                        <div id="container" class="form-group"><label class="col-sm-2 control-label" style="width: 60px;">背景</label>
+                            <a id="pickfiles" href="javascript:;" class="btn btn-sm btn-primary m-l"><i class="fa fa-upload"></i> 上传图片</a>
+                            <!--<a id="uploadfiles" href="javascript:;">上传</a>-->
+                            <div id="filelist" style="padding-top:10px;">
+                                <img src="" th:src="''+*{picurl}" width="100%" height="200px;" />
+                                <input type="hidden" name="picurl" th:value="*{picurl}"/>
+                            </div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label" style="width: 60px;">标题</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" th:value="*{title}" name="title" />
+                            </div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label" style="width: 60px;">链接地址</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" th:value="*{url}" name="url" />
+                            </div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label" style="width: 60px;">排序</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" th:value="*{type}" name="type" />
+                            </div>
+                        </div>
+                        <!--<div class="form-group"><label class="col-sm-2 control-label" style="width: 60px;">状态</label>
+                            <div class="col-sm-10">
+                                <select class="form-control m-b" th:value="*{status}" name="status">
+                                    <option th:value="0" th:selected="${systemAd.status eq 0}" th:text="禁用"></option>
+                                    <option th:value="1" th:selected="${systemAd.status eq 1}" th:text="正常"></option>
+                                </select>
+                            </div>
+                        </div>-->
+                        <!--<div class="ibox float-e-margins">
+                            <textarea id="textarea1" style="height:400px;" name="projectintro" th:text="*{projectintro}"></textarea>
+                            &lt;!&ndash;这里引用jquery和wangEditor.js&ndash;&gt;
+                            <script type="text/javascript">
+                                var editor = new wangEditor('textarea1');
+                                // 上传图片
+                                editor.config.uploadImgUrl = '/uploadImg';
+                                editor.config.uploadImgFileName = 'myFileName';
+                                editor.create();
+                            </script>
+                        </div>-->
+                        <div>
+                            <!--<input type="hidden" name="view" value="introduce"/>-->
+                            <input type="hidden" th:value="*{id}" name="id"/>
+                            <button class="btn btn-lg btn-primary m-t-n-xs" type="submit"><strong>提 交</strong></button>
+                        </div>
+                        <br/>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="admin/layouts/footer :: footer">...</div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var uploader = new plupload.Uploader({
+            runtimes: 'html5,flash,silverlight,html4',
+            browse_button: 'pickfiles', // you can pass an id...
+            container: document.getElementById('container'), // ... or DOM Element itself
+            url: '/upload',
+            flash_swf_url: '/plugins/plupload/js/Moxie.swf',
+            silverlight_xap_url: '/plugins/plupload/js/Moxie.xap',
+            //在选择的flash中只能选择一个文件或图片
+            multi_selection: false,
+            filters: {
+                max_file_size: '50MB',
+                mime_types: [
+                    {title: "Image files", extensions: "jpg,gif,png"},
+                    //{title: "Zip files", extensions: "zip"}
+                ]
+            },
+
+            init: {
+                PostInit: function () {
+//                    document.getElementById('filelist').innerHTML = '';
+//                    document.getElementById('uploadfiles').onclick = function () {
+//                        uploader.start();
+//                        return false;
+//                    };
+                },
+                QueueChanged:function () {
+                    uploader.start();
+                },
+//                FilesAdded: function (up, files) {
+//                    plupload.each(files, function (file) {
+//                        document.getElementById('filelist').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+//                    });
+//                },
+
+//                UploadProgress: function (up, file) {
+//                    document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+//                },
+
+                Error: function (up, err) {
+                    document.getElementById('error').appendChild(document.createTextNode("\nError #" + err.code + ": " + err.message));
+                },
+                FileUploaded : function(up, file, info) {//文件上传完毕触发
+                    var response = $.parseJSON(info.response);
+                    if (response.status) {
+                        $('#filelist').html( $('<img src="/' + response.fileUrl + ' " width="100%" height="200px;" /><input type="hidden" name="picurl" value="'+response.fileUrl+'"/>') );
+                    }
+                }
+            }
+        });
+        uploader.init();
+    });
+
+
+</script>
+<!-- 实例化编辑器 -->
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        //提交
+//        $(".btn-sm").click(function () {
+//            $.ajax({
+//                cache: true,
+//                type: "POST",
+//                url:"/info/admin/edit",
+//                data:$('#form').serialize(),// 你的formid
+//                async: false,
+//                success: function(data) {
+//                    alert("编辑成功");
+//                },
+//                error: function(request) {
+//                    alert("编辑失败");
+//                }
+//            });
+//        });
+
+        // 日期初始化
+        $('#data_1').find('.input-group.date').datepicker({
+            todayBtn: "linked",
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+        // 验证
+        $("#form").validate({
+            rules: {
+                evolvetime: {
+                    required: true
+                }
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    $("#system").toggleClass("active");
+    $("#system2").toggleClass("active");
+</script>
+</body>
+
+</html>

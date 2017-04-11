@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:include="admin/layouts/header :: header(title='房屋租赁后台管理系统')"></head>
+<body>
+
+<div id="wrapper">
+    <div th:replace="admin/layouts/left :: left">...</div>
+
+    <div id="page-wrapper" class="gray-bg">
+
+        <div th:replace="admin/layouts/top :: top">...</div>
+
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>房屋管理</h2>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="/index">首页</a>
+                    </li>
+                    <li class="active">
+                        <strong>编辑</strong>
+                    </li>
+                </ol>
+            </div>
+            <div class="col-lg-2">
+
+            </div>
+        </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-6" style="width: 100%">
+                    <form role="form" class="form-horizontal" id="form" th:action="@{/house/admin/edit}" method="post" th:object="${house}">
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">地址</label>
+                            <div class="col-sm-10"><input class="form-control" type="text" th:value="*{address}" name="address" /></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">户型</label>
+                            <div class="col-sm-2"><input class="form-control" type="text" th:value="*{houseType}" name="houseType" /></div>
+                            <label class="col-sm-1 control-label">朝向</label>
+                            <div class="col-sm-1"><input class="form-control" type="text" th:value="*{orientation}" name="orientation" /></div>
+                            <label class="col-sm-1 control-label">楼层</label>
+                            <div class="col-sm-1"><input class="form-control" type="text" th:value="*{floor}" name="floor" /></div>
+                            <label class="col-sm-1 control-label">楼型</label>
+                            <div class="col-sm-2"><input class="form-control" type="text" th:value="*{floorType}" name="floorType" /></div>
+                        </div>
+                        <div class="form-group"  id="data_1">
+                            <label class="col-sm-1 control-label">装修情况</label>
+                            <div class="col-sm-2"><input class="form-control" type="text" th:value="*{fitment}" name="fitment" /></div>
+                            <label class="col-sm-1 control-label">面积</label>
+                            <div class="col-sm-1"><input class="form-control" type="text" th:value="*{acreage}" name="acreage" /></div>
+                            <label class="col-sm-1 control-label">一梯几户</label>
+                            <div class="col-sm-1"><input class="form-control" type="text" th:value="*{family}" name="family" /></div>
+                            <label class="col-sm-1 control-label">建造年代</label>
+                            <!--<div class="col-sm-2"><input class="form-control" type="text" name="yearTime" /></div>-->
+                            <div class="input-group date col-sm-2"  data-date-format="yyyy-mm-dd">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input class="form-control" type="text" th:value="*{yearTime}" name="yearTime" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">租赁价格</label>
+                            <div class="col-sm-1"><input class="form-control" type="text" th:value="*{price}" name="price" /></div>
+                            <div class="col-sm-2">
+                                <select class="form-control m-b" name="priceUnits">
+                                    <option value="元/月">元/月</option>
+                                    <option value="元/天">元/天</option>
+                                    <option value="元/年">元/年</option>
+                                </select>
+                            </div>
+                            <label class="col-sm-1 control-label">房东姓名</label>
+                            <div class="col-sm-2"><input class="form-control" type="text" th:value="*{landlord}" name="landlord" /></div>
+                            <label class="col-sm-1 control-label">房东手机</label>
+                            <div class="col-sm-2"><input class="form-control" type="text" th:value="*{moble}" name="moble" /></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">跟进内容</label>
+                            <div class="col-sm-10"><input class="form-control" type="text" th:value="*{remark}" name="remark" /></div>
+                        </div>
+                        <div class="form-group" id="container">
+                            <a id="pickfiles" href="javascript:;" class="btn btn-sm btn-primary m-l"><i class="fa fa-upload"></i> 上传图片</a>
+                            <div id="filelist" style="padding-top: 5px;">
+                                <div class="lightBoxGallery" id="lightBoxGallery">
+                                    <span th:each="src : *{#strings.listSplit(photosPath ,',')}">
+                                        <a th:href="${src}" data-gallery=""><img th:src="${src}" width="100px;"/></a>
+                                    </span>
+                                    <div id="blueimp-gallery" class="blueimp-gallery">
+                                        <div class="slides"></div>
+                                        <h3 class="title"></h3>
+                                        <a class="prev">‹</a>
+                                        <a class="next">›</a>
+                                        <a class="close">×</a>
+                                        <a class="play-pause"></a>
+                                        <ol class="indicator"></ol>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="picPath" th:value="*{photosPath}" name="photosPath" />
+                            <input type="hidden" th:value="*{id}" name="id" />
+                        </div>
+                        <div class="form-group" style="text-align: center;">
+                            <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>提 交</strong></button>
+                            <button class="btn btn-sm btn-primary m-t-n-xs" type="button" onclick="javascript:history.back(-1);"><strong>返 回</strong></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="admin/layouts/footer :: footer">...</div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var uploader = new plupload.Uploader({
+            runtimes: 'html5,flash,silverlight,html4',
+            browse_button: 'pickfiles', // you can pass an id...
+            container: document.getElementById('container'), // ... or DOM Element itself
+            url: '/upload',
+            flash_swf_url: '/plugins/plupload/Moxie.swf',
+            silverlight_xap_url: '/plugins/plupload/Moxie.xap',
+            //在选择的flash中只能选择一个文件或图片
+            multi_selection: false,
+            filters: {
+                max_file_size: '10mb',
+                mime_types: [
+                    {title: "Image files", extensions: "jpg,gif,png"},
+                    //{title: "Zip files", extensions: "zip"}
+                ]
+            },
+
+            init: {
+                PostInit: function () {
+//                    document.getElementById('filelist').innerHTML = '';
+//                    document.getElementById('uploadfiles').onclick = function () {
+//                        uploader.start();
+//                        return false;
+//                    };
+                },
+                QueueChanged:function () {
+                    uploader.start();
+                },
+//                FilesAdded: function (up, files) {
+//                    plupload.each(files, function (file) {
+//                        document.getElementById('filelist').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+//                    });
+//                },
+
+//                UploadProgress: function (up, file) {
+//                    document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+//                },
+
+                Error: function (up, err) {
+                    document.getElementById('error').appendChild(document.createTextNode("\nError #" + err.code + ": " + err.message));
+                },
+                FileUploaded : function(up, file, info) {//文件上传完毕触发
+                    var response = $.parseJSON(info.response);
+                    if (response.status) {
+                        $('#lightBoxGallery').append( $('<a href="' + response.fileUrl + ' " data-gallery=""><img src="' + response.fileUrl + ' " width="100px;" /></a>') );
+                        $('#picPath').val($('#picPath').val()+response.fileUrl+",")
+                    }
+                }
+            }
+        });
+        uploader.init();
+    });
+</script>
+<!-- 实例化编辑器 -->
+<script type="text/javascript">
+    $(document).ready(function(){
+        // 日期初始化
+        $('#data_1').find('.input-group.date').datepicker({
+            todayBtn: "linked",
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+        // 验证
+        $("#form").validate({
+            rules: {
+                address: { required: true },
+                houseType: { required: true },
+                orientation: { required: true },
+                floor: { required: true },
+                floorType: { required: true },
+                fitment: { required: true },
+                acreage: { required: true },
+                family: { required: true },
+                yearTime: { required: true },
+                price: { required: true },
+                landlord: { required: true },
+                moble: { required: true },
+                remark: { required: true }
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    $("#house").toggleClass("active");
+</script>
+</body>
+</html>

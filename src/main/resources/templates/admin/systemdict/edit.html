@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:include="admin/layouts/header :: header(title='房屋租赁后台管理系统')"></head>
+<body>
+
+<div id="wrapper">
+    <div th:replace="admin/layouts/left :: left">...</div>
+
+    <div id="page-wrapper" class="gray-bg">
+
+        <div th:replace="admin/layouts/top :: top">...</div>
+
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>系统字典</h2>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="/index">首页</a>
+                    </li>
+                    <li class="active">
+                        <strong>编辑</strong>
+                    </li>
+                </ol>
+            </div>
+            <div class="col-lg-2">
+
+            </div>
+        </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-6" style="width: 100%">
+                    <form role="form" class="form-horizontal" id="form" th:action="@{/dict/admin/edit}" method="post" th:object="${systemdict}">
+                        <div class="form-group"><label class="col-sm-2 control-label" style="width: 60px;">名称</label>
+                            <div class="col-sm-10"><input class="form-control" type="text" th:value="*{name}" name="name"/></div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label" style="width: 60px;">编码</label>
+                            <div class="col-sm-10"><input class="form-control" type="text" th:value="*{code}" name="code"/></div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label" style="width: 60px;">上级</label>
+                            <div class="col-sm-10"><input class="form-control" type="text" th:value="*{pid}" name="pid"/></div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label" style="width: 60px;">类型</label>
+                            <div class="col-sm-10"><input class="form-control" type="text" th:value="*{type}" name="type"/></div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label" style="width: 60px;">备注</label>
+                            <div class="col-sm-10"><input class="form-control" type="text" th:value="*{remark}" name="remark"/></div>
+                        </div>
+                        <!--<div class="form-group"><label class="col-sm-2 control-label" style="width: 60px;">类别</label>
+                            <div class="col-sm-10">
+                                <select class="form-control m-b" name="type">
+                                    <option th:each="dict : ${dicts}" th:value="${dict.type}" th:text="${dict.name}" th:selected="${#strings.equals(dict.type,dict.type)}"></option>
+                                </select>
+                            </div>
+                        </div>-->
+                        <!--<div class="form-group" id="data_1">
+                            <label class="col-sm-2 control-label" style="width: 60px;">日期</label>
+                            <div class="input-group date">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <input class="form-control" type="text" th:value="*{#dates.format(evolvetime,'yyyy-mm-dd')}" name="evolvetime"/>
+                            </div>
+                        </div>-->
+                        <!--<div class="ibox float-e-margins">
+                            <textarea id="textarea1" style="height:400px;" name="content" th:text="*{content}"></textarea>
+                            &lt;!&ndash;这里引用jquery和wangEditor.js&ndash;&gt;
+                            <script type="text/javascript">
+                                var editor = new wangEditor('textarea1');
+                                // 上传图片
+                                editor.config.uploadImgUrl = '/uploadImg';
+                                editor.config.uploadImgFileName = 'myFileName';
+                                editor.create();
+                            </script>
+                        </div>-->
+                        <div>
+                            <!--<input type="hidden" name="view" value="introduce"/>-->
+                            <input type="hidden" th:value="*{id}" name="id"/>
+                            <button class="btn btn-lg btn-primary m-t-n-xs" type="submit"><strong>提 交</strong></button>
+                        </div>
+                        <br/>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="admin/layouts/footer :: footer">...</div>
+
+    </div>
+</div>
+
+<!-- 实例化编辑器 -->
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        //提交
+//        $(".btn-sm").click(function () {
+//            $.ajax({
+//                cache: true,
+//                type: "POST",
+//                url:"/info/admin/edit",
+//                data:$('#form').serialize(),// 你的formid
+//                async: false,
+//                success: function(data) {
+//                    alert("编辑成功");
+//                },
+//                error: function(request) {
+//                    alert("编辑失败");
+//                }
+//            });
+//        });
+
+        // 日期初始化
+        $('#data_1').find('.input-group.date').datepicker({
+            todayBtn: "linked",
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+        // 验证
+        $("#form").validate({
+            rules: {
+                evolvetime: {
+                    required: true
+                }
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    $("#system").toggleClass("active");
+    $("#system1").toggleClass("active");
+</script>
+</body>
+
+</html>

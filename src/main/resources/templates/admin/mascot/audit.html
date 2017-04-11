@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:include="admin/layouts/header :: header(title='吉祥物作品详情')"></head>
+<body>
+
+<div id="wrapper">
+    <div th:replace="admin/layouts/left :: left">...</div>
+
+    <div id="page-wrapper" class="gray-bg">
+
+        <div th:replace="admin/layouts/top :: top">...</div>
+
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>吉祥物作品详情</h2>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="/index">首页</a>
+                    </li>
+                    <li class="active">
+                        <strong>吉祥物详情</strong>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="wrapper wrapper-content animated">
+            <div class="row" >
+
+                <table class="table table-striped table-bordered table-hover" style="padding:10px;margin:10px;width: 90%;background-color: white;">
+
+                    <tbody>
+                        <tr>
+                            <td colspan="2" style="text-align: center">
+                                <a class="btn btn-success btn-lg" onclick="updateStatus(this,1)" style="margin-right:40px;">审核通过</a>
+                                <a class="btn btn-danger btn-lg" onclick="updateStatus(this,2)">审核不通过</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style="text-align:right;">设计师名字</th>
+                            <td th:text="${mascot.stylistName}"></td>
+                        </tr>
+                        <tr>
+                            <th style="text-align:right;">手机号</th>
+                            <td th:text="${mascot.mobile}"></td>
+                        </tr>
+                        <tr>
+                            <th style="text-align:right;">作品名称</th>
+                            <td th:text="${mascot.worksName}"></td>
+                        </tr>
+                        <tr>
+                            <th style="text-align:right;">上传时间</th>
+                            <td th:text="${#dates.format(mascot.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                        </tr>
+                        <tr>
+                            <th style="text-align:right;">封面图</th>
+                            <td><img class="col-md-8" th:src="@{${mascot.picPath}}" width="450px;" height="200px;"/></td>
+                        </tr>
+                        <tr>
+                            <th style="text-align:right;">作品简介</th>
+                            <td><span class="form-control" th:utext="${mascot.content}" style="width: 495px;height: 200px;margin-left:15px;" th:disabled="disabled"></span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align: center">
+                                <a class="btn btn-success btn-lg" onclick="updateStatus(this,1)" style="margin-right:40px;">审核通过</a>
+                                <a class="btn btn-danger btn-lg" onclick="updateStatus(this,2)">审核不通过</a>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div th:replace="admin/layouts/footer :: footer">...</div>
+    </div>
+</div>
+<script  th:inline="javascript">
+    // 审核
+    function updateStatus(obj,status) {
+        /*<![CDATA[*/
+        var id = [[${mascot.id}]];
+        /*]]>*/
+        layer.confirm('确定执行此操作吗？', {
+            btn: ['确定','取消'] //按钮
+        }, function(){
+            $.ajax({
+                type: "POST",
+                data: {id: id,status:status},
+                dataType: "json",
+                url: "/mascot/admin/auditStatus",
+                success: function (data) {
+                    if (data.message === "SUCCESS") {
+                        layer.msg('成功', {
+                            time: 1000
+                        },function () {
+                            window.location.href = "/mascot/admin/list";
+                        });
+                    } else {
+                        layer.msg("系统异常");
+                    }
+                },
+                error: function () {
+                    layer.alert("系统异常，请稍后再试!");
+                }
+            });
+        });
+    }
+</script>
+<script type="text/javascript">
+    $("#mascot").toggleClass("active");
+</script>
+</body>
+
+</html>

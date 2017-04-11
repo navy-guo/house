@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>房屋租赁后台管理系统</title>
+    <link href="/admin/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/admin/font-awesome/css/font-awesome.css" rel="stylesheet"/>
+    <link href="/admin/css/animate.css" rel="stylesheet"/>
+    <link href="/admin/css/style.css" rel="stylesheet"/>
+</head>
+
+<body class="gray-bg">
+    <div class="middle-box text-center loginscreen animated fadeInDown m-t">
+        <div>
+            <div style="padding-top: 15px;">
+                <span><img src="/admin/images/aaa.png" style="width:65%;height:65%;padding-bottom:20px;"/></span>
+                <div id="check" style="padding: 5px;"></div>
+            </div>
+
+            <h3>房屋租赁后台管理系统</h3>
+            <p></p>
+            <form class="m-t" role="form"  method="post">
+                <div class="form-group">
+                    <input type="text" name="name" id="username" value="郭海军" class="form-control" placeholder="用户名" />
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password"  id="password" value="1" class="form-control" placeholder="密码" />
+                </div>
+                <button type="button"  onclick="sendData();" class="btn btn-primary btn-block full-width m-b">登录</button>
+            </form>
+            <p class="m-t"> <small>郭海军 &copy; 2017</small> </p>
+        </div>
+    </div>
+</body>
+<script src="/admin/js/jquery-2.1.1.js"></script>
+<script src="/admin/js/bootstrap.min.js"></script>
+<script src="/admin/js/login.js"></script>
+</html>

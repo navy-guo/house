@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin/layouts/header :: header(title='房屋租赁后台管理系统')"></head>
+<link th:href="@{/admin/css/plugins/summernote/summernote.css}" rel="stylesheet"/>
+<link th:href="@{/admin/css/plugins/summernote/summernote-bs3.css}"  rel="stylesheet"/>
+<body>
+
+    <div id="wrapper">
+        <div th:replace="admin/layouts/left :: left">...</div>
+
+        <div id="page-wrapper" class="gray-bg">
+
+            <div th:replace="admin/layouts/top :: top">...</div>
+
+            <!--<div class="row wrapper border-bottom white-bg page-heading">-->
+                <!--<div class="col-lg-10">-->
+                    <!--<h2>静态表</h2>-->
+                    <!--<ol class="breadcrumb">-->
+                        <!--<li>-->
+                            <!--<a href="index.html">首页</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a>表格</a>-->
+                        <!--</li>-->
+                        <!--<li class="active">-->
+                            <!--<strong>静态表</strong>-->
+                        <!--</li>-->
+                    <!--</ol>-->
+                <!--</div>-->
+                <!--<div class="col-lg-2">-->
+
+                <!--</div>-->
+            <!--</div>-->
+            <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="row">
+                    <div class="col-lg-6" style="width: 100%">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>系统字典</h5>
+                                <div class="ibox-tools">
+                                    <a type="button" class="btn btn-primary" th:href="@{/dict/admin/edit}">添加</a>
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>名称</th>
+                                        <th>编码</th>
+                                        <th>上级</th>
+                                        <th>类别</th>
+                                        <th>备注</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="dict : ${pageInfo.list}">
+                                        <td th:text="${dictStat.index+1}"></td>
+                                        <td th:text="${dict.name}"></td>
+                                        <td th:text="${dict.code}"></td>
+                                        <td th:text="${dict.pid}"></td>
+                                        <td th:text="${dict.type}"></td>
+                                        <td th:text="${dict.remark}"></td>
+                                        <td>
+                                            <a class="btn btn-info btn-sm" type="button" th:href="@{/dict/admin/edit(id=${dict.id})}"><i class="fa fa-edit"></i> 编辑</a>
+                                            <a class="btn btn-warning btn-sm" type="button" th:id="${dict.id}" onclick="del(this)"><i class="fa fa-remove"></i> 删除</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:replace="common/paging :: paging">...</div>
+            </div>
+            <div th:replace="admin/layouts/footer :: footer">...</div>
+        </div>
+    </div>
+
+    <script>
+        // 删除
+        function del(obj) {
+            var id = $(obj).attr("id");
+            layer.confirm('确定要删除吗？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                $.ajax({
+                    type: "POST",
+                    data: {id: id},
+                    dataType: "json",
+                    url: "/dict/admin/del",
+                    success: function (data) {
+                        if (data.message === "SUCCESS") {
+                            layer.msg('删除成功', {
+                                time: 1000
+                            },function () {
+                                window.location.href = "";
+                            });
+                        } else {
+                            layer.msg("系统异常");
+                        }
+                    },
+                    error: function () {
+                        layer.alert("系统异常，请稍后再试!");
+                    }
+                });
+            });
+        }
+    </script>
+    <script type="text/javascript">
+        $("#system").toggleClass("active");
+        $("#system1").toggleClass("active");
+    </script>
+
+</body>
+</html>
